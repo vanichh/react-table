@@ -1,0 +1,6 @@
+@import-normalize;
+
+.App {
+  text-align: center;
+  @apply bg-red-500 #{!important};
+}
