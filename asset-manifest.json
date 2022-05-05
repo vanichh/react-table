@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/vanichh/react-table/static/css/main.a7e35ac1.css",
+    "main.js": "/vanichh/react-table/static/js/main.e0b35b7c.js",
+    "static/js/787.6541b775.chunk.js": "/vanichh/react-table/static/js/787.6541b775.chunk.js",
+    "index.html": "/vanichh/react-table/index.html",
+    "main.a7e35ac1.css.map": "/vanichh/react-table/static/css/main.a7e35ac1.css.map",
+    "main.e0b35b7c.js.map": "/vanichh/react-table/static/js/main.e0b35b7c.js.map",
+    "787.6541b775.chunk.js.map": "/vanichh/react-table/static/js/787.6541b775.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a7e35ac1.css",
+    "static/js/main.e0b35b7c.js"
+  ]
+}
