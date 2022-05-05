@@ -7,7 +7,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { MainLayout } from 'layout/main';
-import { useFetch } from 'hooks/useFetch';
+import { useFetch } from 'hooks/use-fetch';
 import { FC } from 'react';
 
 type TData = Array<{
