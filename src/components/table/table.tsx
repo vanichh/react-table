@@ -24,7 +24,8 @@ export const Table: FC = () => {
   const { data, loading } = useFetch<TData>(URL_API);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  const lenghtPage = data.length / rowsPerPage;
+  console.log('page', page);
+  console.log('rowsPerPage', rowsPerPage);
 
   const handleChangePage = (event: unknown, page: number) => {
     setPage(page);
@@ -54,7 +55,7 @@ export const Table: FC = () => {
             </TableHead>
             <TableBody>
               {data
-                .slice(page, rowsPerPage)
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(({ userId, id, title, body }) => (
                   <TableRow className='even:bg-slate-100' key={id}>
                     <TableCell className='w-1'>{userId}</TableCell>
@@ -67,7 +68,8 @@ export const Table: FC = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component='div'
-            count={lenghtPage}
+            colSpan={3}
+            count={data.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
