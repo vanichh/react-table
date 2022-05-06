@@ -6,7 +6,7 @@ interface IProps {
 
 export const MainLayout: FC<IProps> = ({ children }) => {
   return (
-    <main className='container justify-center flex mx-auto px-4'>
+    <main className='container flex-col w-2/5 justify-center flex mx-auto px-4'>
       {children}
     </main>
   );

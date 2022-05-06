@@ -5,10 +5,11 @@ import {
   CircularProgress,
   TableCell,
   TableRow,
+  TablePagination,
 } from '@mui/material';
 import { MainLayout } from 'layout/main';
 import { useFetch } from 'hooks/use-fetch';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 type TData = Array<{
   userId: number;
@@ -21,6 +22,19 @@ const URL_API = 'https://jsonplaceholder.typicode.com/posts/';
 
 export const Table: FC = () => {
   const { data, loading } = useFetch<TData>(URL_API);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
+  const lenghtPage = data.length / rowsPerPage;
+
+  const handleChangePage = (event: unknown, page: number) => {
+    setPage(page);
+  };
+
+  const handleChangeRowsPerPage = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(+target.value);
+  };
 
   return (
     <MainLayout>
@@ -29,27 +43,37 @@ export const Table: FC = () => {
           <CircularProgress />
         </div>
       ) : (
-        <TableConteiner
-          sx={{ maxWidth: 850 }}
-          className='rounded-lg border-solid border-2 border-gray-100'
-        >
-          <TableHead>
-            <TableRow className='bg-slate-600'>
-              <TableCell className='!text-white'>id</TableCell>
-              <TableCell className='!text-white'>Загаловок</TableCell>
-              <TableCell className='!text-white'>Текст</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map(({ userId, id, title, body }) => (
-              <TableRow className='even:bg-slate-100' key={id}>
-                <TableCell className='w-1'>{userId}</TableCell>
-                <TableCell>{title}</TableCell>
-                <TableCell>{body}</TableCell>
+        <>
+          <TableConteiner className='rounded-lg border-solid border-2 border-gray-100'>
+            <TableHead>
+              <TableRow className='bg-slate-600'>
+                <TableCell className='!text-white'>id</TableCell>
+                <TableCell className='!text-white'>Загаловок</TableCell>
+                <TableCell className='!text-white'>Текст</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </TableConteiner>
+            </TableHead>
+            <TableBody>
+              {data
+                .slice(page, rowsPerPage)
+                .map(({ userId, id, title, body }) => (
+                  <TableRow className='even:bg-slate-100' key={id}>
+                    <TableCell className='w-1'>{userId}</TableCell>
+                    <TableCell>{title}</TableCell>
+                    <TableCell>{body}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </TableConteiner>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component='div'
+            count={lenghtPage}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
       )}
     </MainLayout>
   );
