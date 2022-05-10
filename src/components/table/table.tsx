@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { MainLayout } from 'layout/main';
 import { useFetch } from 'hooks/use-fetch';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 type TData = Array<{
   userId: number;
@@ -24,22 +24,40 @@ export const Table: FC = () => {
   const { data, loading } = useFetch<TData>(URL_API);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  console.log('page', page);
-  console.log('rowsPerPage', rowsPerPage);
+  const [tableList, setTableList] = useState<TData | null>(null);
 
-  const handleChangePage = (event: unknown, page: number) => {
+  useEffect(() => {
+    if (data !== null) {
+      const sampleTable = data.slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage
+      );
+      setTableList(sampleTable);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (data) {
+      setTableList(
+        data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+      );
+    }
+  }, [page, rowsPerPage]);
+  
+  
+  const handleChangePage = (e: unknown, page: number) => {
     setPage(page);
   };
 
   const handleChangeRowsPerPage = ({
     target,
   }: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(+target.value);
+    setRowsPerPage(Number(target.value));
   };
 
   return (
     <MainLayout>
-      {loading ? (
+      {loading || tableList === null ? (
         <div className='flex h-screen items-center justify-center'>
           <CircularProgress />
         </div>
@@ -54,15 +72,15 @@ export const Table: FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(({ userId, id, title, body }) => (
+              <>
+                {tableList!.map(({ userId, id, title, body }) => (
                   <TableRow className='even:bg-slate-100' key={id}>
                     <TableCell className='w-1'>{userId}</TableCell>
                     <TableCell>{title}</TableCell>
                     <TableCell>{body}</TableCell>
                   </TableRow>
                 ))}
+              </>
             </TableBody>
           </TableConteiner>
           <TablePagination

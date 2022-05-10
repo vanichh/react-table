@@ -15,7 +15,7 @@ type IinitState<T = any> = {
 };
 
 const initState: IinitState = {
-  data: {},
+  data: null,
   loading: true,
   error: null,
 };

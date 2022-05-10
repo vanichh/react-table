@@ -1,10 +1,7 @@
 import './App.scss';
-import { Main } from 'components/table'
- 
-export default function App() {
-  return (
-    <>
-      <Main />
-    </>
-  );
-}
+import { Table } from 'components/table';
+import { FC } from 'react';
+
+export const App:FC = () => {
+  return <Table />;
+};
