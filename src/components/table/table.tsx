@@ -6,6 +6,7 @@ import {
   TableCell,
   TableRow,
   TablePagination,
+  TableFooter,
 } from '@mui/material';
 import { MainLayout } from 'layout/main';
 import { useFetch } from 'hooks/use-fetch';
@@ -27,7 +28,7 @@ export const Table: FC = () => {
   const [tableList, setTableList] = useState<TData | null>(null);
 
   useEffect(() => {
-    if (data !== null) {
+    if (data !== undefined) {
       const sampleTable = data.slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
@@ -43,8 +44,7 @@ export const Table: FC = () => {
       );
     }
   }, [page, rowsPerPage]);
-  
-  
+
   const handleChangePage = (e: unknown, page: number) => {
     setPage(page);
   };
@@ -82,17 +82,20 @@ export const Table: FC = () => {
                 ))}
               </>
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  colSpan={3}
+                  count={data!.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </TableRow>
+            </TableFooter>
           </TableConteiner>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component='div'
-            colSpan={3}
-            count={data.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
         </>
       )}
     </MainLayout>

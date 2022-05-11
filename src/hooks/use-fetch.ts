@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 const sittingFetch: RequestInit = {
   method: 'GET',
@@ -8,14 +8,12 @@ const sittingFetch: RequestInit = {
   },
 };
 
-type IinitState<T = any> = {
-  data: T;
+type IinitState = {
   loading: boolean;
   error: null | string;
 };
 
 const initState: IinitState = {
-  data: null,
   loading: true,
   error: null,
 };
@@ -23,31 +21,27 @@ const initState: IinitState = {
 export const useFetch = <T = any>(
   url: string,
   sitting: RequestInit = sittingFetch
-): IinitState<T> => {
+) => {
   const [state, setState] = useState(initState);
-
-  const request = useCallback(
-    () =>
-      (async () => {
-        try {
-          const response = await fetch(url, sitting);
-          if (response.ok) {
-            const data = await response.json();
-            setState({ ...state, data, loading: false });
-          }
-        } catch (err) {
-          if (err instanceof TypeError) {
-            const error = err.message;
-            setState({ ...state, error });
-          }
-        }
-      })(),
-    []
-  );
+  const [data, setData] = useState<T>();
 
   useEffect(() => {
-    request();
+    (async () => {
+      try {
+        const response = await fetch(url, sitting);
+        if (response.ok) {
+          const data = await response.json();
+          setData(data);
+          setState({ ...state, loading: false });
+        }
+      } catch (err) {
+        if (err instanceof TypeError) {
+          const error: string = err.message;
+          setState({ ...state, error });
+        }
+      }
+    })();
   }, []);
 
-  return useMemo(() => state, [state]);
+  return useMemo(() => ({ ...state, data }), [state]);
 };
